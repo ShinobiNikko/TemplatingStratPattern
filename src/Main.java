@@ -1,4 +1,6 @@
 import java.util.*;
+//This is an example of a Strategy pattern.
+//For CSC 3250
 
 class Course{
     private String _cnum;
