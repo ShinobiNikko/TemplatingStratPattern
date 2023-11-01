@@ -42,6 +42,7 @@ class CourseSearch implements SearchBehavior<Course, String>{
 class AllItems<T>{
     private ArrayList<T> _items;
     public AllItems(){_items = new ArrayList<T>();}
+    public AllItems(int size){_items = new ArrayList<T>(size);}
     public void addItem(T t){_items.add(t);}
     public void removeItem(int i){
         if(i >= 0 && i <= _items.size()) {
@@ -70,6 +71,7 @@ class AllItems<T>{
 class AllStudents{
     private AllItems<Student> _students;
     public AllStudents(){_students = new AllItems<Student>();}
+    public AllStudents(int size){_students = new AllItems<Student>(size);}
     public void addStudent(String id){_students.addItem(new Student(id));}
     public boolean isStudent(String id){
         return _students.isItem(id, new StudentSearch());
@@ -78,8 +80,16 @@ class AllStudents{
         return _students.findItem(id, new StudentSearch());
     }
     public void removeStudent(String id){
-        int i = _students.findItem(id, new StudentSearch());
+        int i = findStudent(id);
         _students.removeItem(i);
+    }
+    public boolean modifyStudentID(String id, String new_id){
+        int i = findStudent(id);
+        if(i < 0) return false;
+        else{
+            _students.getItem(i).setID(new_id);
+            return true;
+        }
     }
     public String toString(){
         String s = "Students:\n";
@@ -87,10 +97,12 @@ class AllStudents{
             s += (_students.getItem(i).toString() + "\n");
         return s;
     }
+    public int size(){return _students.size();}
 }
 class AllCourses{
     private AllItems<Course> _courses;
     public AllCourses(){_courses = new AllItems<Course>();}
+    public AllCourses(int size){_courses = new AllItems<Course>(size);}
     public void addCourse(String cnum, int c){_courses.addItem(new Course(cnum, c));}
     public boolean isCourse(String cnum){
         return _courses.isItem(cnum, new CourseSearch());
@@ -99,8 +111,16 @@ class AllCourses{
         return _courses.findItem(cnum, new CourseSearch());
     }
     public void removeCourse(String cnum){
-        int i = _courses.findItem(cnum, new CourseSearch());
+        int i = findCourse(cnum);
         _courses.removeItem(i);
+    }
+    public boolean modifyCourseNumber(String cnum, String new_cnum){
+        int i = findCourse(cnum);
+        if(i < 0) return false;
+        else{
+            _courses.getItem(i).setNumber(new_cnum);
+            return true;
+        }
     }
     public String toString(){
         String s = "Courses:\n";
@@ -108,6 +128,7 @@ class AllCourses{
             s += (_courses.getItem(i).toString() + "\n");
         return s;
     }
+    public int size(){return _courses.size();}
 }
 
 public class Main {
