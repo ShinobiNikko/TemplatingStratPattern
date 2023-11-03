@@ -49,14 +49,6 @@ class AllItems<T>{
             _items.remove(i);
         }
     }
-    public <S> boolean isItem(S v, SearchBehavior<T, S> sb){
-        for (T item : _items){
-            if(sb.search(item, v)){
-                return true;
-            }
-        }
-        return false;
-    }
     public <S> int findItem(S v, SearchBehavior<T, S> sb){
         for (int i=0; i<_items.size(); i++){
             if(sb.search(_items.get(i), v)){
@@ -74,7 +66,9 @@ class AllStudents{
     public AllStudents(int size){_students = new AllItems<Student>(size);}
     public void addStudent(String id){_students.addItem(new Student(id));}
     public boolean isStudent(String id){
-        return _students.isItem(id, new StudentSearch());
+        if(_students.findItem(id, new StudentSearch()) == -1)
+            return false;
+        return true;
     }
     public int findStudent(String id){
         return _students.findItem(id, new StudentSearch());
@@ -105,7 +99,9 @@ class AllCourses{
     public AllCourses(int size){_courses = new AllItems<Course>(size);}
     public void addCourse(String cnum, int c){_courses.addItem(new Course(cnum, c));}
     public boolean isCourse(String cnum){
-        return _courses.isItem(cnum, new CourseSearch());
+        if(_courses.findItem(cnum, new CourseSearch()) == -1)
+            return false;
+        return true;
     }
     public int findCourse(String cnum){
         return _courses.findItem(cnum, new CourseSearch());
