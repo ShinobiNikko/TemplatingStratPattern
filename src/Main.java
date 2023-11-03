@@ -39,6 +39,11 @@ class CourseSearch implements SearchBehavior<Course, String>{
         return obj.getNumber().equals(v);
     }
 }
+class EnrollNumberSearch implements SearchBehavior<String, String>{
+    public boolean search(String val1, String val2) {
+        return val1.equals(val2);
+    }
+}
 class AllItems<T>{
     private ArrayList<T> _items;
     public AllItems(){_items = new ArrayList<T>();}
@@ -126,7 +131,23 @@ class AllCourses{
     }
     public int size(){return _courses.size();}
 }
-
+class Enrollment{
+    private HashMap<String, AllItems<String>> _enroll;
+    public Enrollment(){_enroll = new HashMap<String, AllItems<String>>();}
+    public Enrollment(int size){_enroll = new HashMap<String, AllItems<String>>(size);}
+    public boolean dropStudentFromCourse(String id, String cnum){
+        // drops the course from the student's set of courses
+        // if no other courses exist for student, drop student from hashmap
+        AllItems<String> t = _enroll.get(id);
+        int i = t.findItem(cnum, new EnrollNumberSearch());
+        if(i == -1)
+            return false;
+        t.removeItem(i);
+        if(t.size() == 0)
+            _enroll.remove(id);
+        return true;
+    }
+}
 public class Main {
     public static void main(String[] args) {
         AllStudents as = new AllStudents();
